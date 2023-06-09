@@ -60,7 +60,7 @@ export default {
   
   methods: {
     fetchNews() {
-      const apiUrl = "http://localhost:8082/api/bookmark/all";
+      const apiUrl = "http://15.164.220.194:8080/api/bookmark/all";
       const accessToken = localStorage.getItem("accessToken");
       axios
         .get(apiUrl, {

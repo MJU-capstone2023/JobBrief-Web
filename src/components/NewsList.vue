@@ -62,11 +62,12 @@ export default {
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/news?job=all&page=${this.currentPage}`;
+      const apiUrl = `http://15.164.220.194:8080/api/news?job=all&page=${this.currentPage}`;
       console.log(apiUrl);
 
       axios
         .get(apiUrl)
+
         .then((response) => {
           this.newsList = response.data.newsList;
           console.log(this.newsList);

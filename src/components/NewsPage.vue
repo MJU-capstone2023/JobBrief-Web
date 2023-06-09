@@ -64,8 +64,8 @@ export default {
   fetchArticle() {
     const accessToken = localStorage.getItem("accessToken");
     console.log(accessToken);
-    const apiUrlA = `http://localhost:8082/api/news/member/${this.newsId}`;
-    const apiUrl = `http://localhost:8082/api/news/${this.newsId}`;
+    const apiUrlA = `http://15.164.220.194:8080/api/news/member/${this.newsId}`;
+    const apiUrl = `http://15.164.220.194:8080/api/news/${this.newsId}`;
     const apiUrlToUse = this.isAuthenticated ? apiUrlA : apiUrl;
     console.log(apiUrlToUse);
 
@@ -99,7 +99,7 @@ export default {
 
   saveScrapOpinion() {
     const accessToken = localStorage.getItem("accessToken");
-    const scrapOpinionApiUrl = `http://localhost:8082/api/scrap/new/${this.newsId}`;
+    const scrapOpinionApiUrl = `http://15.164.220.194:8080/api/scrap/new/${this.newsId}`;
 
     // 요청 본문에 opinion 값을 추가하여 전송합니다.
     const requestData = {
@@ -128,7 +128,7 @@ export default {
   },
 
     addBookmark() {
-      const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
+      const bookmarkApiUrl = "http://15.164.220.194:8080/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
 
       axios
@@ -144,7 +144,7 @@ export default {
     },
 
     removeBookmark() {
-      const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
+      const bookmarkApiUrl = "http://15.164.220.194:8080/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
       axios
         .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
