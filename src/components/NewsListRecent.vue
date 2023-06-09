@@ -36,7 +36,7 @@ export default {
   
   methods: {
     fetchNews() {
-      const apiUrl = "http://15.164.220.194:8080/api/recent-news";
+      const apiUrl = "https://job-brief-mjucapstone.com/api/recent-news";
       const accessToken = localStorage.getItem("accessToken");
       axios
         .get(apiUrl, {

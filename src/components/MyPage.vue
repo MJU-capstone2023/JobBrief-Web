@@ -41,7 +41,7 @@ export default {
 
   methods: {
     fetchUserData() {
-      const apiUrl = "http://15.164.220.194:8080/api/member/info";
+      const apiUrl = "https://job-brief-mjucapstone.com/api/member/info";
       const accessToken = localStorage.getItem("accessToken");
 
       axios
@@ -60,7 +60,7 @@ export default {
     },
 
     saveUserData() {
-      const apiUrl = 'http://15.164.220.194:8080/api/member/info';
+      const apiUrl = 'https://job-brief-mjucapstone.com/api/member/info';
       const accessToken = localStorage.getItem("accessToken");
 
       const requestData = {

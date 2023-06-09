@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     login() {
-      const apiUrl = 'http://15.164.220.194:8080/api/auth/login';
+      const apiUrl = 'https://job-brief-mjucapstone.com/api/auth/login';
       const requestData = {
         userId: this.userId,
         password: this.password

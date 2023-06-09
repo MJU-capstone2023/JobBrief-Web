@@ -59,7 +59,7 @@ export default {
 
   methods: {
     register() {
-      const apiUrl = 'http://15.164.220.194:8080/api/member/join';
+      const apiUrl = 'https://job-brief-mjucapstone.com/api/member/join';
       const requestData = {
         name: this.name,
         userId: this.userId,
@@ -82,7 +82,7 @@ export default {
     },
 
     idConfirm() {
-      const apiUrl = 'http://15.164.220.194:8080/api/member/id-check';
+      const apiUrl = 'https://job-brief-mjucapstone.com/api/member/id-check';
       const requestData = {
         userId: this.userId,
       };
