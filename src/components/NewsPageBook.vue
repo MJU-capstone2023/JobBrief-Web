@@ -6,18 +6,22 @@
     <hr>
     <div>{{ article.content }}</div>
     <br>
+    <h5>뉴스 요약</h5>
+    <div>{{ article.summary }}</div> 
+    <br>
     <div style="display: flex;">
       <h5>Keywords:</h5>
       <ul>
-        <span v-for="(keyword, index) in article.keywords" :key="index">{{ keyword.keywordName }}</span>
+        <span v-for="(keyword, index) in article.keywords" :key="index"  @click="searchKeyword(keyword.keywordName)">{{ keyword.keywordName }}</span>
       </ul>
     </div>
   </div>
+
   <div v-if="isAuthenticated">
     <div style="display:flex" class="container">
       <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class="input-box" v-if="!article.scrap_opinion"></b-form-input>
       <div v-else>
-        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion" @input="scrap_opinion = $event.target.value">
+        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion">
         </b-form-input>
       </div>
       <b-button class="button1" variant="outline-primary" @click="saveScrapOpinion">Save Scrap Opinion</b-button>
@@ -27,9 +31,8 @@
     </div>
   </div>
 </template>
-  
+
 <script>
-    
     import axios from "axios";
     
     export default {
@@ -149,7 +152,7 @@
   </script>
   
   
-  <style scoped>
+<style scoped>
   h1 {
     font-size: 3rem;
     font-weight: bold;

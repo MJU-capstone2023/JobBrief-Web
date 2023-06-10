@@ -47,7 +47,7 @@
         </li>
         <li
           class="page-item"
-          v-for="page in totalPages"
+          v-for="page in visiblePages"
           :key="page"
           :class="{ 'active': page === this.currentPage }"
         >
@@ -81,6 +81,27 @@ export default {
   mounted() {
     this.fetchNews();
   },
+
+  computed: {
+    visiblePages() {
+      const pageRange = Math.floor(this.pageSize / 2);
+      let startPage = this.currentPage - pageRange;
+      let endPage = this.currentPage + pageRange;
+
+      if (startPage <= 0) {
+        startPage = 1;
+        endPage = Math.min(this.totalPages, this.pageSize);
+      } else if (endPage > this.totalPages) {
+        endPage = this.totalPages;
+        startPage = Math.max(1, this.totalPages - this.pageSize + 1);
+      }
+
+      return Array(endPage - startPage + 1)
+        .fill()
+        .map((_, index) => startPage + index);
+    },
+  },
+
   
   methods: {
     fetchNews() {
@@ -169,6 +190,7 @@ export default {
 
   .my-list-group-item-title {
     margin-bottom: 0;
+
   }
 
   .my-list-group-item-date,
@@ -178,18 +200,26 @@ export default {
 
   .my-list-group-item-content {
     margin-bottom: 0.5rem;
+    
   }
 
   .my-list-group-item-footer {
     font-size: 0.875rem;
   }
 
-  .pagnation{
+  .pagination{
+    justify-content: center; 
     align-items: center;
   }
 
   .search-button{
     width: 150px;
+    
   }
+  
+  .page-item{
+    align-items: center;
+  }
+
 </style>
 

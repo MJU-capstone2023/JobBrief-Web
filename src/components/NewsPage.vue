@@ -16,11 +16,10 @@
       </ul>
     </div>
   </div>
-
   <div v-if="isAuthenticated">
     <div style="display:flex" class="container">
       <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class="input-box" v-if="!article.scrap_opinion"></b-form-input>
-      <div v-else>g
+      <div v-else>
         <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion">
         </b-form-input>
       </div>
