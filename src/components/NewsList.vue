@@ -1,5 +1,26 @@
 <template>
   <div class="my-list-group">
+    <div class="container my-5">
+      <div style="display: flex;">
+          <div class="search-bar" style="display:flex; align-items: center;">
+            <div style="margin-right: 10px; width: 200px">
+              <select name="cards_id"  class="form-select form-control"  v-model="selectedType">
+                <option value="" disabled selected hidden>선택하세요</option>
+                <option value="title">제목</option>
+                <option value="reporter">기자</option>
+                <option value="content">본문</option>
+                <option value="press">언론사</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-8">  
+              <b-form-input v-model="searchValue" placeholder="검색하세요"></b-form-input>
+          </div>
+          <div class="col-2">     
+              <button @click="sendData" class="btn btn-primary btn-block search-button" type="button">검색</button>
+          </div>
+      </div>
+    </div>
     <div
       v-for="(newsItem, index) in this.newsList"
       :key="index"
@@ -52,7 +73,9 @@ export default {
       currentPage: 1,
       totalPages: 0,
       pageSize: 10, // 페이지당 아이템 수
-      isActiveIndex: null, // 수정된 부분: isActiveIndex 추가
+      isActiveIndex: null, // 수정된 부분: isActiveIndex 추가.
+      searchValue: '',
+      selectedType: ''
     };
   },
   mounted() {
@@ -67,7 +90,6 @@ export default {
 
       axios
         .get(apiUrl)
-
         .then((response) => {
           this.newsList = response.data.newsList;
           console.log(this.newsList);
@@ -98,7 +120,28 @@ export default {
     goToNews(newsId) {
       this.$router.push(`/newspage/${newsId}`);
     },
-  },
+    sendData(){
+      console.log(this.selectedType, this.searchValue)
+      if (!this.selectedType || !this.searchValue) {
+        alert('검색어를 입력하세요.');
+      }
+
+      console.log(this.currentPage);
+      const apiUrl = `http://localhost:8082/api/news/search?type=${this.selectedType}&keyword=${this.searchValue}`;
+      console.log(apiUrl);
+
+      axios
+        .get(apiUrl)
+        .then((response) => {
+          this.newsList = response.data.newsList;
+          console.log(this.newsList);
+          this.totalPages = response.data.totalPages;
+        })
+        .catch((error) => {
+          console.error("API 오류:", error);
+        });
+    }
+    },
 };
 </script>
 
@@ -143,6 +186,10 @@ export default {
 
   .pagnation{
     align-items: center;
+  }
+
+  .search-button{
+    width: 150px;
   }
 </style>
 
