@@ -6,6 +6,9 @@
     <hr>
     <div>{{ article.content }}</div>
     <br>
+    <h5>뉴스 요약</h5>
+    <div>{{ article.summary }}</div>
+    <br>
     <div style="display: flex;">
       <h5>Keywords:</h5>
       <ul>
@@ -17,7 +20,7 @@
     <div style="display:flex" class="container">
       <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class="input-box" v-if="!article.scrap_opinion"></b-form-input>
       <div v-else>
-        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion" @input="scrap_opinion = $event.target.value">
+        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion">
         </b-form-input>
       </div>
       <b-button class="button1" variant="outline-primary" @click="saveScrapOpinion">Save Scrap Opinion</b-button>
@@ -61,101 +64,101 @@ export default {
   },
 
   methods: {
-  fetchArticle() {
-    const accessToken = localStorage.getItem("accessToken");
-    console.log(accessToken);
-    const apiUrlA = `https://job-brief-mjucapstone.com/api/news/member/${this.newsId}`;
-    const apiUrl = `https://job-brief-mjucapstone.com/api/news/${this.newsId}`;
-    const apiUrlToUse = this.isAuthenticated ? apiUrlA : apiUrl;
-    console.log(apiUrlToUse);
+    fetchArticle() {
+      const accessToken = localStorage.getItem("accessToken");
+      console.log(accessToken);
+      const apiUrlA = `https://job-brief-mjucapstone.com/api/news/member/${this.newsId}`;
+      const apiUrl = `https://job-brief-mjucapstone.com/api/news/${this.newsId}`;
+      const apiUrlToUse = this.isAuthenticated ? apiUrlA : apiUrl;
+      console.log(apiUrlToUse);
 
-    if (this.isAuthenticated ){
+      if (this.isAuthenticated ){
+        axios
+            .get(apiUrlToUse, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((response) => {
+              this.article = response.data;
+              console.log(this.article);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+      } else{
+        axios
+            .get(apiUrlToUse, {
+            })
+            .then((response) => {
+              this.article = response.data;
+              console.log(this.article);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+      }
+    },
+
+    saveScrapOpinion() {
+      const accessToken = localStorage.getItem("accessToken");
+      const scrapOpinionApiUrl = `https://job-brief-mjucapstone.com/api/scrap/new/${this.newsId}`;
+
+      // 요청 본문에 opinion 값을 추가하여 전송합니다.
+      const requestData = {
+        opinion: this.scrap_opinion
+      };
+
+      console.log(accessToken);
+      console.log(scrapOpinionApiUrl);
+      console.log(requestData);
+
       axios
-      .get(apiUrlToUse, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        this.article = response.data;
-        console.log(this.article);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    } else{
-      axios
-      .get(apiUrlToUse, {
-      })
-      .then((response) => {
-        this.article = response.data;
-        console.log(this.article);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    }
-  },
+          .post(scrapOpinionApiUrl, requestData, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(response => {
+            alert('저장되었습니다!');
 
-  saveScrapOpinion() {
-    const accessToken = localStorage.getItem("accessToken");
-    const scrapOpinionApiUrl = `https://job-brief-mjucapstone.com/api/scrap/new/${this.newsId}`;
-
-    // 요청 본문에 opinion 값을 추가하여 전송합니다.
-    const requestData = {
-      opinion: this.scrap_opinion 
-    };
-
-    console.log(accessToken);
-    console.log(scrapOpinionApiUrl);
-    console.log(requestData);
-
-    axios
-      .post(scrapOpinionApiUrl, requestData, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json', 
-          },
-      })
-      .then(response => {
-          alert('저장되었습니다!');
-        
-      })
-      .catch(error => {
-        next('/login');
-        alert('해당 기능에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
-      });
-  },
+          })
+          .catch(error => {
+            next('/login');
+            alert('해당 기능에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
+          });
+    },
 
     addBookmark() {
       const bookmarkApiUrl = "https://job-brief-mjucapstone.com/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
 
       axios
-        .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
-        .then(response => {
-          this.isBookmarked = true;
-          console.log("북마크 추가 완료");
-        })
-        .catch(error => {
-          next('/login');
-          alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
-        });
+          .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
+          .then(response => {
+            this.isBookmarked = true;
+            console.log("북마크 추가 완료");
+          })
+          .catch(error => {
+            next('/login');
+            alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
+          });
     },
 
     removeBookmark() {
       const bookmarkApiUrl = "https://job-brief-mjucapstone.com/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
       axios
-        .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
-        .then(response => {
-          this.isBookmarked = false;
-          console.log("북마크 삭제 완료");
-        })
-        .catch(error => {
-          next('/login');
-          alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
-        });
+          .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
+          .then(response => {
+            this.isBookmarked = false;
+            console.log("북마크 삭제 완료");
+          })
+          .catch(error => {
+            next('/login');
+            alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
+          });
     },
   },
 };
@@ -201,7 +204,7 @@ ul span {
 .scrap-opinion {
   margin-right: 10px;
 }
-s
+
 .button-container {
   display: flex;
   align-items: center;
