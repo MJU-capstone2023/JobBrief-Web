@@ -205,7 +205,7 @@ export default {
   },
   goToNews(newsId) {
       console.log(newsId);
-      this.$router.push(`/newspage/${newsId}`);
+      window.location.href = `/newspage/${newsId}`;
     }
   },
 };

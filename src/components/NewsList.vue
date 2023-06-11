@@ -122,19 +122,35 @@ export default {
     goToPage(page) {
       if (page !== this.currentPage) {
         this.currentPage = page;
-        this.fetchNews();
+
+        // 검색 결과 페이지에서는 검색 결과를 가져오도록 수정
+        if (this.searchValue && this.selectedType) {
+          this.searchNews();
+        } else {
+          this.fetchNews();
+        }
       }
     },
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
-        this.fetchNews();
+        // 검색 결과 페이지에서는 검색 결과를 가져오도록 수정
+        if (this.searchValue && this.selectedType) {
+          this.searchNews();
+        } else {
+          this.fetchNews();
+        }
       }
     },
     nextPage() {
       if (this.currentPage < this.totalPages) {
         this.currentPage++;
-        this.fetchNews();
+        // 검색 결과 페이지에서는 검색 결과를 가져오도록 수정
+        if (this.searchValue && this.selectedType) {
+          this.searchNews();
+        } else {
+          this.fetchNews();
+        }
       }
     },
     goToNews(newsId) {
