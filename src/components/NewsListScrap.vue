@@ -1,10 +1,4 @@
 <template>
-   <div class="nav-bar">
-      <router-link class="button" to="/newslistbookmark">북마크</router-link>
-      <router-link class="button" to="/newslistscrap">스크랩</router-link>
-      <router-link class="button" to="/newslistrecent">최근 본 뉴스</router-link>
-  </div>
-
   <div class="my-list-group">
     <div
       v-for="(newsItem, index) in this.newsList"
@@ -64,10 +58,12 @@ export default {
     this.fetchNews();
   },
   
+  
   methods: {
     fetchNews() {
       console.log(this.currentPage);
-      const apiUrl = `https://job-brief-mjucapstone.com/api/scrap/all`;
+      const apiUrl = `https://job-brief-mjucapstone.com/api/scrap/all?page=${this.currentPage}`;
+
       console.log(apiUrl);
       const accessToken = localStorage.getItem("accessToken");
 

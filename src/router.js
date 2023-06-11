@@ -4,7 +4,6 @@ import LoginPage from './components/LoginPage.vue';
 import JoinPage from './components/JoinPage.vue';
 import NewsPage from  './components/NewsPage.vue';
 import CollectionPage from  './components/CollectionPage.vue';
-import NewsPageBook from './components/NewsPageBook.vue';
 import NewsListPQ from './components/NewsListPQ.vue';
 import NewsListIT from './components/NewsListIT.vue';
 import NewsListHA from './components/NewsListHA.vue';
@@ -43,7 +42,23 @@ const routes = [
     path: '/collection',
     component: CollectionPage,
     beforeEnter: requireAuth,
+    children: [
+      {
+        path: '/collection/newslistbookmark',
+        component: NewsListBookmark,
+        beforeEnter: requireAuth
+      },
+      {
+        path: '/collection/newslistrecent',
+        component: NewsListRecent
+      },
+      {
+        path: '/collection/newslistscrap',
+        component: NewsListScrap
+      }
+    ]
   },
+  
   {
     path: '/newslist',
     component: NewsList,
@@ -84,12 +99,6 @@ const routes = [
   {
     path: '/newspage/:newsId',
     component: NewsPage,
-    props: true
-  },
-  {
-    path: '/newspagebook/:newsId',
-    component: NewsPageBook,    
-    beforeEnter: requireAuth,
     props: true
   },
   {

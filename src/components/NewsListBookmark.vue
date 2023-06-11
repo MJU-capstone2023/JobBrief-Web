@@ -81,7 +81,8 @@ export default {
   
   methods: {
     fetchNews() {
-      const apiUrl = "https://job-brief-mjucapstone.com/api/bookmark/all";
+      const apiUrl = `https://job-brief-mjucapstone.com/api/bookmark/all?page=${this.currentPage}`;
+
       const accessToken = localStorage.getItem("accessToken");
       axios
         .get(apiUrl, {
@@ -118,7 +119,7 @@ export default {
       }
     },
     goToNews(newsId) {
-      this.$router.push(`/newspagebook/${newsId}`);
+      this.$router.push(`/newspage/${newsId}`);
     },
   },
 };

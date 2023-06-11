@@ -10,7 +10,7 @@
     <div>{{ article.summary }}</div> 
     <br>
     <div style="display: flex;">
-      <h5>Keywords:</h5>
+      <h5>키워드:</h5>
       <ul>
         <span v-for="(keyword, index) in article.keywords" :key="index"  @click="searchKeyword(keyword.keywordName)">{{ keyword.keywordName }}</span>
       </ul>
@@ -18,9 +18,9 @@
   </div>
   <div v-if="isAuthenticated">
     <div style="display:flex" class="container">
-      <b-form-input v-model="scrap_opinion" placeholder="Enter your opinion" class="input-box" v-if="!article.scrap_opinion"></b-form-input>
+      <b-form-input v-model="scrapOpinion" placeholder="Enter your opinion"  class="input-box" v-if="!article.scrapOpinion"></b-form-input>
       <div v-else>
-        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrap_opinion">
+        <b-form-input class="input-box" type="textarea" id="scrap_opinion" name="scrap_opinion" v-model="article.scrapOpinion">
         </b-form-input>
       </div>
       <b-button class="button1" variant="outline-primary" @click="saveScrapOpinion">Save Scrap Opinion</b-button>
@@ -29,7 +29,34 @@
       </b-button>
     </div>
   </div>
-</template>
+
+    <!-- keyword NEWS  -->
+    <div v-if="this.keyword.length!=0" class="container my-5">
+      <h5>{{this.keyword}}</h5>
+      <hr/>
+      <div
+      v-for="(newsItem, index) in this.keywordnewsList"
+      :key="index"
+      class="my-list-group-item"
+      :class="{ active: isActiveIndex === index }"
+      @mouseenter="isActiveIndex = index"
+      @mouseleave="isActiveIndex = null"
+      @click="goToNews(newsItem.id)"
+    >
+      <div class="my-list-group-item-header">
+        <span class="my-list-group-item-title" style="font-weight: bold">{{ newsItem.title }}</span>
+      </div>
+      <span class="my-list-group-item-content">
+        {{ newsItem.summary }}
+      </span>
+    </div>
+    <hr />
+  </div>
+
+
+  </template>
+  
+
 
 <script>
 
@@ -47,7 +74,9 @@ export default {
     return {
       article: {},
       scrap_opinion: "",
-      isBookmarked: false
+      isBookmarked: false,
+      keywordnewsList: [],
+      keyword: ''
     };
   },
 
@@ -161,19 +190,23 @@ export default {
         });
     },
   searchKeyword(keywordName) {
-    const apiUrl =  `http://localhost:8082/api/keyword/search?keyword=${keywordName}`
-    alert(`Clicked on keyword: ${keywordName}`);
+    const apiUrl =  `https://job-brief-mjucapstone.com/api/keyword/search?keyword=${keywordName}`
+    // alert(`Clicked on keyword: ${keywordName}`);
+    this.keyword = keywordName;
     axios
         .get(apiUrl)
         .then((response) => {
-          this.newsList = response.data;
-          console.log(this.newsList);
+          this.keywordnewsList = response.data.newsList;
+          console.log( this.keywordnewsList );
         })
         .catch((error) => {
           console.error("API 오류:", error);
         });
-  
-  }
+  },
+  goToNews(newsId) {
+      console.log(newsId);
+      this.$router.push(`/newspage/${newsId}`);
+    }
   },
 };
 </script>

@@ -18,7 +18,7 @@
       <router-link class="button" to="/join">회원가입</router-link>    
     </div>
     <hr>
-    <router-view/>
+    <router-view/>    
   </div>
   <div>
   </div>

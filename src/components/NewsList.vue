@@ -113,7 +113,6 @@ export default {
         .get(apiUrl)
         .then((response) => {
           this.newsList = response.data.newsList;
-          console.log(this.newsList);
           this.totalPages = response.data.totalPages;
         })
         .catch((error) => {
@@ -148,7 +147,7 @@ export default {
       }
 
       console.log(this.currentPage);
-      const apiUrl = `http://localhost:8082/api/news/search?type=${this.selectedType}&keyword=${this.searchValue}`;
+      const apiUrl = `https://job-brief-mjucapstone.com/api/news/search?type=${this.selectedType}&keyword=${this.searchValue}`;
       console.log(apiUrl);
 
       axios

@@ -1,10 +1,10 @@
 <template>
-    <div class="nav-bar">
-      <router-link class="button" to="/newslistbookmark">북마크</router-link>
-      <router-link class="button" to="/newslistscrap">스크랩</router-link>
-      <router-link class="button" to="/newslistrecent">최근 본 뉴스</router-link>
-      </div>
-      <router-view/>
+  <div class="nav-bar">
+    <router-link class="button" to="/collection/newslistbookmark">북마크</router-link>
+    <router-link class="button" to="/collection/newslistscrap">스크랩</router-link>
+    <router-link class="button" to="/collection/newslistrecent">최근 본 뉴스</router-link>
+  </div>
+  <router-view></router-view>
 </template>
 
 <script>
