@@ -176,6 +176,22 @@ export default {
         .catch((error) => {
           console.error("API 오류:", error);
         });
+    },
+    searchNews() {
+      console.log(this.currentPage);
+      const apiUrl = `https://job-brief-mjucapstone.com/api/news/search?type=${this.selectedType}&keyword=${this.searchValue}&page=${this.currentPage}`;
+      console.log(apiUrl);
+
+      axios
+          .get(apiUrl)
+          .then((response) => {
+            this.newsList = response.data.newsList;
+            console.log(this.newsList);
+            this.totalPages = response.data.totalPages;
+          })
+          .catch((error) => {
+            console.error("API 오류:", error);
+          });
     }
     },
 };
