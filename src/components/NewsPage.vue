@@ -7,7 +7,7 @@
     <div>{{ article.content }}</div>
     <br>
     <h5>뉴스 요약</h5>
-    <div>{{ article.summary }}</div> 
+    <div>{{ article.summary }}</div>
     <br>
     <div style="display: flex;">
       <h5>키워드:</h5>
@@ -30,17 +30,17 @@
     </div>
   </div>
 
-    <div v-if="this.keyword.length!=0" class="container my-5">
-      <h5>{{this.keyword}}</h5>
-      <hr/>
-      <div
-      v-for="(newsItem, index) in this.keywordnewsList"
-      :key="index"
-      class="my-list-group-item"
-      :class="{ active: isActiveIndex === index }"
-      @mouseenter="isActiveIndex = index"
-      @mouseleave="isActiveIndex = null"
-      @click="goToNews(newsItem.id)"
+  <div v-if="this.keyword.length!=0" class="container my-5">
+    <h5>{{this.keyword}}</h5>
+    <hr/>
+    <div
+        v-for="(newsItem, index) in this.keywordnewsList"
+        :key="index"
+        class="my-list-group-item"
+        :class="{ active: isActiveIndex === index }"
+        @mouseenter="isActiveIndex = index"
+        @mouseleave="isActiveIndex = null"
+        @click="goToNews(newsItem.id)"
     >
       <div class="my-list-group-item-header">
         <span class="my-list-group-item-title" style="font-weight: bold">{{ newsItem.title }}</span>
@@ -52,7 +52,7 @@
     <hr />
   </div>
 </template>
-  
+
 
 
 <script>
@@ -70,10 +70,10 @@ export default {
   data() {
     return {
       article: {},
-      scrap_opinion: "",
-      isBookmarked: false,
+      scrapOpinion: "",
+      isBookmarked: false, // 기본값으로 초기화
       keywordnewsList: [],
-      keyword: ''
+      keyword: ""
     };
   },
 
@@ -90,117 +90,125 @@ export default {
   },
 
   methods: {
- fetchArticle() {
-    const accessToken = localStorage.getItem("accessToken");
-    console.log(accessToken);
-    const apiUrlA = `https://job-brief-mjucapstone.com/api/news/member/${this.newsId}`;
-    const apiUrl = `https://job-brief-mjucapstone.com/api/news/${this.newsId}`;
-    const apiUrlToUse = this.isAuthenticated ? apiUrlA : apiUrl;
-    console.log(apiUrlToUse);
-
-    if (this.isAuthenticated ){
-      axios
-      .get(apiUrlToUse, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        this.article = response.data;
-        this.isBookmarked = response.data.bookmarked;
-        this.scrapOpinion = response.data.scrap_opinion;
-        console.log(this.article);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    } else{
-      axios
-      .get(apiUrlToUse, {
-      })
-      .then((response) => {
-        this.article = response.data;
-        console.log(this.article);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    }
-  },
-
-  saveScrapOpinion() {
+    fetchArticle() {
       const accessToken = localStorage.getItem("accessToken");
-      const scrapOpinionApiUrl = `https://job-brief-mjucapstone.com/api/scrap/new/${this.newsId}`;
+      console.log(accessToken);
+      const apiUrlA = `http://localhost:8082/api/news/member/${this.newsId}`;
+      const apiUrl = `http://localhost:8082/api/news/${this.newsId}`;
+      const apiUrlToUse = this.isAuthenticated ? apiUrlA : apiUrl;
+      console.log(apiUrlToUse);
+
+      if (this.isAuthenticated ){
+        axios
+            .get(apiUrlToUse, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            })
+            .then((response) => {
+              this.article = response.data;
+              this.isBookmarked = response.data.bookmarked;
+              this.scrapOpinion = response.data.scrap_opinion;
+              console.log(this.article);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+      } else{
+        axios
+            .get(apiUrlToUse, {
+            })
+            .then((response) => {
+              this.article = response.data;
+              console.log(this.article);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+      }
+    },
+
+    toggleBookmark() {
+      if (this.isBookmarked) {
+        this.removeBookmark();
+      } else {
+        this.addBookmark();
+      }
+    },
+
+    saveScrapOpinion() {
+      const accessToken = localStorage.getItem("accessToken");
+      const scrapOpinionApiUrl = `http://localhost:8082/api/scrap/new/${this.newsId}`;
 
       const requestData = {
-        opinion: this.scrapOpinion 
+        opinion: this.scrapOpinion
       };
 
       axios
-        .post(scrapOpinionApiUrl, requestData, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json', 
-          },
-        })
-        .then(response => {
-          alert('저장되었습니다!');
-          this.article.scrap_opinion = this.scrapOpinion; // scrapOpinion 값을 뷰에 반영
-        })
-        .catch(error => {
-          next('/login');
-          alert('해당 기능에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
-        });
-  },
+          .post(scrapOpinionApiUrl, requestData, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+          })
+          .then(response => {
+            alert('저장되었습니다!');
+            this.article.scrap_opinion = this.scrapOpinion; // scrapOpinion 값을 뷰에 반영
+          })
+          .catch(error => {
+            next('/login');
+            alert('해당 기능에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
+          });
+    },
 
     addBookmark() {
-      const bookmarkApiUrl = "https://job-brief-mjucapstone.com/api/bookmark/";
+      const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
 
       axios
-        .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
-        .then(response => {
-          this.isBookmarked = true;
-          console.log("북마크 추가 완료");
-        })
-        .catch(error => {
-          next('/login');
-          alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
-        });
+          .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
+          .then(response => {
+            this.isBookmarked = true;
+            console.log("북마크 추가 완료");
+          })
+          .catch(error => {
+            next('/login');
+            alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
+          });
     },
 
     removeBookmark() {
-      const bookmarkApiUrl = "https://job-brief-mjucapstone.com/api/bookmark/";
+      const bookmarkApiUrl = "http://localhost:8082/api/bookmark/";
       const accessToken = localStorage.getItem('accessToken');
       axios
-        .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
-        .then(response => {
-          this.isBookmarked = false;
-          console.log("북마크 삭제 완료");
-        })
-        .catch(error => {
-          next('/login');
-          alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
-        });
+          .post(bookmarkApiUrl, { newsId: this.article.id }, { headers: { Authorization: `Bearer ${accessToken}` } })
+          .then(response => {
+            this.isBookmarked = false;
+            console.log("북마크 삭제 완료");
+          })
+          .catch(error => {
+            next('/login');
+            alert('해당 기능에 페이지에 접근 권한이 없습니다. 로그인창으로 넘어갑니다');
+          });
     },
-  searchKeyword(keywordName) {
-    const apiUrl =  `https://job-brief-mjucapstone.com/api/keyword/search?keyword=${keywordName}`
-    // alert(`Clicked on keyword: ${keywordName}`);
-    this.keyword = keywordName;
-    axios
-        .get(apiUrl)
-        .then((response) => {
-          this.keywordnewsList = response.data.newsList;
-          console.log( this.keywordnewsList );
-        })
-        .catch((error) => {
-          console.error("API 오류:", error);
-        });
-  },
-  goToNews(newsId) {
-  console.log(newsId);
-  window.location.href = `/newspage/${newsId}`;
-}
+    searchKeyword(keywordName) {
+      const apiUrl =  `http://localhost:8082/api/keyword/search?keyword=${keywordName}`
+      // alert(`Clicked on keyword: ${keywordName}`);
+      this.keyword = keywordName;
+      axios
+          .get(apiUrl)
+          .then((response) => {
+            this.keywordnewsList = response.data.newsList;
+            console.log( this.keywordnewsList );
+          })
+          .catch((error) => {
+            console.error("API 오류:", error);
+          });
+    },
+    goToNews(newsId) {
+      console.log(newsId);
+      window.location.href = `/newspage/${newsId}`;
+    }
   },
 };
 </script>
