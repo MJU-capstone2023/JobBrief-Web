@@ -63,7 +63,7 @@
 
 <script>
 import axios from "axios";
-import authService from "../authService.js";
+import  authService from "../authService.js";
 
 export default {
   data() {
@@ -131,6 +131,7 @@ export default {
         }
       }
     },
+
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
@@ -193,7 +194,8 @@ export default {
             console.error("API 오류:", error);
           });
     }
-    },
+
+  },
 };
 </script>
 
